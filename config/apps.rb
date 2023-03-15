@@ -30,6 +30,7 @@ Padrino.configure_apps do
   set :session_secret, '9a6e84a9090c0ac50013ebded4d55db6f3bf62d4d394296fe6be56ec0c583403'
   set :protection, :except => :path_traversal
   set :protect_from_csrf, true
+  set :game_api_url, 'https://5eddt4q9dk.execute-api.us-east-1.amazonaws.com/rps-stage/throw'
 end
 
 # Mounts the core application for this project

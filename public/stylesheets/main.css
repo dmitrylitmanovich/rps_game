@@ -2,4 +2,60 @@ html {
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif; }
 
 .game-container {
-  background-color: aqua; }
+  margin: 128px auto;
+  max-width: 754px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; }
+
+.game-title {
+  font-size: 50px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  color: #36006C;
+  opacity: 1;
+  margin-bottom: 44px; }
+
+.game-description {
+  font-size: 21px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 0.54;
+  margin-bottom: 36px; }
+
+.game-select-title {
+  font-size: 25px;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  margin-bottom: 40px; }
+
+.game-bet-cards {
+  display: flex;
+  justify-content: space-between; }
+
+.game-bet-card {
+  height: 273px;
+  width: 240px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; }
+  .game-bet-card:hover {
+    background: #F8F8F8 0% 0% no-repeat padding-box; }
+
+.game-bet-card-icon {
+  max-height: 160px; }
+
+.game-bet-card-name {
+  margin-top: 26px;
+  font-size: 24px;
+  letter-spacing: 0px;
+  color: #36006C;
+  opacity: 1;
+  text-transform: capitalize; }

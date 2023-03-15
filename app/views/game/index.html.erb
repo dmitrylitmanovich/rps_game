@@ -1,13 +1,53 @@
 <div class="game-container">
-  <h1>Rock, Paper, Scissors</h1>
-  <h3>Choose your play</h3>
-  <form>
-    <select>
-      <option hidden="true">Choose</option>
-      <option>Rock</option>
-      <option>Paper</option>
-      <option>Scissors</option>
-    </select>
-    <button type="submit">Throw</button>
-  </form>
+  <div class="game-title">ROCK – PAPER – SCISSORS</div>
+  <div class="game-description">
+    Rock Paper Scissors is a zero sum game that is usually played by two people using their hands and no tools. The idea is to make shapes with an outstretched hand where each shape will have a certain degree of power and will lead to an outcome.
+  </div>
+  <div class="game-select-title">SELECT YOUR BET</div>
+  <div class="game-bet-cards" id="game-bet-cards">
+    <% choices.each do |item| %>
+      <div class="game-bet-card">
+        <%= image_tag "bet_icons/#{item}.svg", class: 'game-bet-card-icon' %>
+        <div class="game-bet-card-name">
+          <%= item %>
+        </div>
+        <input hidden="hidden" value=<%= item %> />
+      </div>
+    <% end %>
+  </div>
 </div>
+
+<script type="text/javascript">
+  window.onload = () => {
+    const makeRequest = (bet) => {
+      const request = new Request(`/throw?bet=${bet}`, {
+        method: "GET"
+      });
+
+      fetch(request)
+        .then((response) => {
+          if (response.status === 200) {
+            console.warn(response.json());
+          } else {
+            throw new Error("Something went wrong on API server!");
+          }
+        })
+        .then((response) => {
+          console.debug(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    const children = Array.from(document.getElementById('game-bet-cards').children);
+
+    children.forEach(item => {
+      item.onclick = (e) => {
+        const betValue = item.getElementsByTagName('input')[0].value;
+        makeRequest(betValue);
+      }
+    });
+  }
+</script> 
+      
