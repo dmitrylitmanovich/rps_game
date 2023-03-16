@@ -9,13 +9,13 @@ module Services
     ]
     POWERS = {
       "rock" => {
-        beat: [ "scissors" ]
+        beats: [ "scissors" ]
       },
       "paper" => {
-        beat: [ "rock" ]
+        beats: [ "rock" ]
       },
       "scissors" => {
-        beat: [ "paper" ]
+        beats: [ "paper" ]
       }
     }
     STATUSES = {
@@ -30,16 +30,17 @@ module Services
       end
 
       def call(u_choice=nil)
-        # return false unless CHOICES.include? u_choice
-
         response = api_call
         c_choice = if response
                     response
                    else
                     CHOICES.sample
                    end
-        p u_choice, c_choice
-        decision(u_choice, c_choice)
+
+        {
+          computer_choice: c_choice,
+          result: decision(u_choice, c_choice)
+        }
       end
 
       private
@@ -47,7 +48,7 @@ module Services
       def api_call
         url = RpsGame::App.settings.game_api_url
         hydra = Typhoeus::Hydra.new   # to run requests in parallel
-        requests = 5.times.map {
+        requests = 5.times.map {      # this is not necessary here
           request = Typhoeus::Request.new(url, followlocation: true)
           hydra.queue(request)
           request
@@ -63,7 +64,7 @@ module Services
       def decision(u_choice, c_choice)
         return STATUSES[:tie] if u_choice == c_choice
 
-        if POWERS[u_choice][:beat].include? c_choice
+        if POWERS[u_choice][:beats].include? c_choice
           return STATUSES[:won]
         else
           return STATUSES[:lose]
