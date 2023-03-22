@@ -43,6 +43,7 @@ Bundler.require(:default, RACK_ENV)
 # Dependencies from 'config' folder are NOT re-required on reload.
 #
 Padrino.dependency_paths.unshift Padrino.root('config/initializers/*.rb')
+Padrino.dependency_paths.unshift Padrino.root('app/services/*.rb')
 
 ##
 # Add your before (RE)load hooks here

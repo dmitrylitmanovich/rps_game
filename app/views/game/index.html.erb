@@ -1,13 +1,78 @@
 <div class="game-container">
-  <h1>Rock, Paper, Scissors</h1>
-  <h3>Choose your play</h3>
-  <form>
-    <select>
-      <option hidden="true">Choose</option>
-      <option>Rock</option>
-      <option>Paper</option>
-      <option>Scissors</option>
-    </select>
-    <button type="submit">Throw</button>
-  </form>
+  <div class="game-title">ROCK – PAPER – SCISSORS</div>
+  <div class="game-description">
+    Rock Paper Scissors is a zero sum game that is usually played by two people using their hands and no tools. The idea is to make shapes with an outstretched hand where each shape will have a certain degree of power and will lead to an outcome.
+  </div>
+  <div class="game-select-title">SELECT YOUR BET</div>
+  <div class="game-bet-cards" id="game-bet-cards">
+    <% choices.each do |item| %>
+      <div class="game-bet-card">
+        <%= image_tag "bet_icons/#{item}.svg", class: 'game-bet-card-icon' %>
+        <div class="game-bet-card-name">
+          <%= item %>
+        </div>
+        <input hidden="hidden" value=<%= item %> />
+      </div>
+    <% end %>
+  </div>
 </div>
+
+<dialog id="game-results-modal">
+  <div id="game-results-modal-title-container"></div>
+  <div id="game-results-modal-description-container"></div>
+  <div id="game-results-modal-icon-container"></div>
+  <button id="game-results-modal-close-btn">Ok</button>
+</dialog>
+
+<script type="text/javascript">
+  window.onload = () => {
+    const close = document.getElementById('game-results-modal-close-btn');
+    const modalIconContainer = document.getElementById('game-results-modal-icon-container');
+    const modalTitleContainer = document.getElementById('game-results-modal-title-container');
+    const modalDescriptionContainer = document.getElementById('game-results-modal-description-container');
+    const modal = document.getElementById('game-results-modal');
+    close.addEventListener('click', () => {
+      modal.close();
+    });
+
+    const makeRequest = (bet) => {
+      const request = new Request(`/throw?bet=${bet}`, {
+        method: "GET"
+      });
+
+      fetch(request)
+        .then((response) => {
+          if (response.status === 200) {
+            response.json().then(body => {
+              const result = body.result;
+              const computerChoise = body.computer_choice;
+              const computerStatus = body.result === 'won' ? 'lose' : 'win';
+              modalTitleContainer.innerHTML = result === 'tie' ? 'Tie!' : `You ${result}!`;
+              modalDescriptionContainer.innerHTML = computerChoise;
+              modalDescriptionContainer.innerHTML = result === 'tie' ? `Curb choses ${computerChoise}` : `Curb with ${computerChoise} ${computerStatus}s`;
+              modalIconContainer.innerHTML = `<%= image_tag "bet_icons/${computerChoise}.svg", alt: 'Game result icon', class: "game-bet-card-icon" %>`
+              modal.showModal();
+            })
+          } else {
+            throw new Error("Something went wrong on API server!");
+          }
+        })
+        .then((response) => {
+          console.debug(response);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    const children = Array.from(document.getElementById('game-bet-cards').children);
+
+    children.forEach(item => {
+      item.onclick = (e) => {
+        const betValue = item.getElementsByTagName('input')[0].value;
+        makeRequest(betValue);
+      }
+    });
+  }
+</script> 
+      

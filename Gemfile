@@ -34,3 +34,10 @@ gem 'padrino', '0.15.3'
 gem "puma", "~> 6.1"
 
 gem "sass", "~> 3.7"
+
+group :development do
+  gem 'dotenv', '2.7.6'
+  gem 'byebug', require: true
+end
+
+gem "typhoeus", "~> 1.4"
